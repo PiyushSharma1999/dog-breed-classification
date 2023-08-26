@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Image Classification</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+
+<body>
+    <script>
+        function chooseFile() {
+            document.getElementById('fileInput').click();
+        }
+    </script>
+    <h1>Upload an Image for Classification</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <!-- Button to trigger file selection -->
+        <button id="choose_file" type="button" onclick="chooseFile()">Choose File</button>
+
+        <!-- Hidden file input element -->
+        <input id="fileInput" type="file" name="file" accept=".jpg, .png, .jpeg" style="display: none;" required>
+        <input id="predict" type="submit" value="Predict">
+    </form>
+</body>
+
+</html>
