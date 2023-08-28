@@ -11,15 +11,16 @@ import os
 
 app = Flask(__name__)
 
-input_image_path = "D:\dog breed classification\input"
-output_image_path = "D:\dog breed classification\static"
+input_image_path = "C:/Users/piyush.sharma/Documents/dog-breed-classification/input"
+output_image_path = "C:/Users/piyush.sharma/Documents/dog-breed-classification/static"
 output_image_name = "image_with_prediction.jpg"
+resized_image_path = "C:/Users/piyush.sharma/Documents/dog-breed-classification/resized image/resized_image.jpg"
 
 # initialize model
 model = tf.keras.models.load_model(("models/20221025-094643-full-image-set-mobilenetv2-Adam.h5"), custom_objects={"KerasLayer": hub.KerasLayer})
 
 # load labels
-labels_csv = pd.read_csv("D:\dog breed classification\labels\labels.csv")
+labels_csv = pd.read_csv("C:/Users/piyush.sharma/Documents/dog-breed-classification/labels/labels.csv")
 labels = labels_csv["breed"].to_numpy()
 
 # create unique breeds array
@@ -36,23 +37,6 @@ def preprocess_image(image):
 def get_pred_labels(prediction_probabilities):
     return unique_breeds[np.argmax(prediction_probabilities)]
 
-# def plot_pred(prediction_probabilities, labels, images, n=1):
-
-#     pred_prob, true_label, image = prediction_probabilities[n], labels[n], images[n]
-
-#     pred_label = get_pred_labels(pred_prob)
-
-#     plt.imshow(image)
-#     plt.xticks([])
-#     plt.yticks([])
-
-#     if pred_label == true_label:
-#         color = "green"
-#     else:
-#         color = "red"
-
-#     plt.title("{} {:2.0f}%".format(pred_label, np.max(pred_prob)*100, true_label, color=color))
-
 def create_data_batches(X, y=None, batch_size=32, valid_data=False,test_data =False):
   """
     Creates batches of data out of image (X) and label (y) pairs.
@@ -65,15 +49,6 @@ def create_data_batches(X, y=None, batch_size=32, valid_data=False,test_data =Fa
     data = tf.data.Dataset.from_tensor_slices((tf.constant(X))) # only filepaths (no labels)
     data_batch = data.map(preprocess_image).batch(batch_size)
     return data_batch
-
-# def unbatchify(data):
-#     images = []
-#     labels = []
-
-#     for image, label in data.unbatch().as_numpy_iterator:
-#       images.append(image)
-#       labels.append(unique_breeds[np.argmax(label)])
-#     return images, labels
 
 def predict(image):
     image_list = []
@@ -89,6 +64,13 @@ def save_prediction_image(image_path, data, pred_labels):
         images.append(image)
     image = cv2.imread(image_path)
 
+    new_height = 300
+    new_width = 200
+
+    resized_image = cv2.resize(image, (new_width, new_height))
+    cv2.imwrite(resized_image_path, resized_image)
+
+    image = cv2.imread(resized_image_path)
     # Define the font and other text properties
     font = cv2.FONT_ITALIC
     font_scale = 0.5
@@ -106,11 +88,6 @@ def save_prediction_image(image_path, data, pred_labels):
                 font, font_scale, font_color, font_thickness, cv2.LINE_AA)
     # Save the image with the prediction label
     cv2.imwrite(output_image_path+"/"+output_image_name, image)
-    
-
-#custom_image_path = "D:/dog breed classification/image/golden.PNG"
-#pred_labels, data = predict(custom_image_path)
-#save_prediction_image(custom_image_path, data, pred_labels)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -137,13 +114,6 @@ def index():
             pred_labels, data = predict(image_path)
 
             save_prediction_image(image_path=image_path, data=data, pred_labels=pred_labels)
-            # try:
-            #     with open(output_image_path +"\'"+ output_image_name, "r") as file:
-            #         file_contents = file.read()
-            # except FileNotFoundError:
-            #     print(f"File not found at path: {image_path}")
-            # except Exception as e:
-            #     print(f"An error occurred: {str(e)}")
 
             # Render the result template with the prediction
             return render_template("result.html", image_path="static/"+output_image_name, prediction = pred_labels[0])
@@ -152,39 +122,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
-# custom_data = create_data_batches(custom_image_path, test_data=True)
-# custom_preds = model.predict(custom_data)
-# custom_pred_labels = [get_pred_labels(custom_preds[i]) for i in range(len(custom_preds))]
-
-# custom_images = []
-# for images in custom_data.unbatch().as_numpy_iterator():
-#    custom_images.append(images)
-
-# print(custom_images)
-
-# image = cv2.imread(custom_image_path[0])
-
-# # Define the font and other text properties
-# font = cv2.FONT_ITALIC
-# font_scale = 0.5
-# font_color = (0, 255, 0)  # White color in BGR
-# font_thickness = 1
-# font_line_type = cv2.LINE_AA
-# shadow_color = (0, 0, 0)  # Black shadow color in BGR
-
-
-# # Calculate the position for the text
-# #text_size, _ = cv2.getTextSize(custom_pred_labels[0].upper(), font, font_scale, font_thickness)
-# text_x = 10  # X-coordinate for the text (adjust as needed)
-# text_y = 20  # Y-coordinate for the text (adjust as needed)
-
-# # Draw the text shadow first
-# cv2.putText(image, custom_pred_labels[0].upper(), (text_x+3 , text_y+3),
-#             font, font_scale, shadow_color, font_thickness, cv2.LINE_AA)
-
-# # Draw the main text on top of the shadow
-# cv2.putText(image, custom_pred_labels[0].upper(), (text_x, text_y),
-#             font, font_scale, font_color, font_thickness, cv2.LINE_AA)
-
-# # Save the image with the prediction label
-# cv2.imwrite('image_with_prediction.jpg', image)
