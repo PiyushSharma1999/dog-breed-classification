@@ -8,10 +8,6 @@ h1 {
     font-family: Segoe UI, Futura, Arial, sans-serif;
 }
 
-a {
-    text-decoration: none;
-}
-
 p {
     color: #1d3557;
     text-align: center;
@@ -26,16 +22,45 @@ body {
     background-color: #f1faee;
 }
 
-#choose_file {
+/* #choose_file {
     background-color: #008CBA;
-            color: #ffffff;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+} */
+
+/* #predict {
+    background-color: #008CBA;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+} */
+
+
+span a:hover {
+    color: #445764;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
-#predict {background-color: #008CBA;
-            color: #ffffff;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;}
+
+input {
+
+    width: 87px;
+}
+
+div[id="fileNameDisplay"] {
+    color: rgb(57, 41, 201);
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #e63946;
+    color: #f1faee;
+}
+
+a:hover {
+    text-decoration: underline;
+}

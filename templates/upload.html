@@ -29,17 +29,23 @@
     </script>
     <h1>Upload an Image for Classification</h1>
     <form method="POST" enctype="multipart/form-data">
+
         <div>
-        <!-- Button to trigger file selection -->
-        <button id="choose_file" type="button" style="display: inline-block;" onclick="chooseFile()">Choose File</button>
-        <!-- Display the selected file name -->
-        <div id="fileNameDisplay" style="display: inline-block;">No file selected</div>
+            <!-- Button to trigger file selection -->
+            <button id="choose_file" type="button" style="display: inline-block;" onclick="chooseFile()">Choose
+                File</button>
+
+
+            <!-- Display the selected file name -->
+            <div id="fileNameDisplay" style="display: inline-block;">No file selected</div>
+        </div>
         <!-- Hidden file input element -->
-        <input id="fileInput" type="file" name="file" accept=".jpg, .png, .jpeg" style="display: none;" required onchange="displayFileName()">
-        <div style=" margin-top: 10px;" >
-        <input id="predict" type="submit" value="Predict" >
-    </div>
-    </div>            
+        <input id="fileInput" type="file" name="file" accept=".jpg, .png, .jpeg" style="display: none;" required
+            onchange="displayFileName()">
+
+        <div style=" margin-top: 10px;">
+            <input id="predict" type="submit" value="Predict">
+        </div>
     </form>
 </body>
 
